@@ -48,7 +48,7 @@ export class ElmaUMDController {
     }
   }
 
-  constructor(private _moduleName: string, props: Props) {
+  constructor(private _moduleName: string, props?: Props) {
     Object.assign(this.props, props)
     this.#init()
   }

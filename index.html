@@ -8,19 +8,23 @@
   </head>
   <body>
     <div id="app"></div>
-    <!-- <script type="module">
-      // import ElmaUMDController from './src/ElmaUMDController.ts'
-      // const react = new ElmaUMDController('React')
-      // const p = react.promise
-      // p.then(() => {
-      //   console.log('resolved')
-      // })
-      // console.log('ElmaUMDController', react.promise)
+    <script type="module">
+      import { ElmaReactLauncher } from './dist/ElmaReactLauncher.es.js'
+      const reactLauncher = new ElmaReactLauncher({
+        moduleName: 'REACT_MODULE_NAME',
+        fileName: 'surveyLib3333333.js',
+        contextData: { data: 'data' },
+        styleName: 'surveyLib-Dj89JgUH_.css',
+        log: true,
+        dependencies: ['React', 'ReactDOM'],
+        reactInitObject: {
+          data: [],
+          changeHandler: (d) => console.log('callback', d),
+        },
+      })
 
-      // document.querySelector('#res').addEventListener('click', () => {
-      //   react.loaded()
-      // })
-    </script> -->
+      console.log(reactLauncher)
+    </script>
     <button type="button" id="res">Resolve</button>
   </body>
 </html>

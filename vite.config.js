@@ -28,7 +28,7 @@ export default defineConfig({
     lib: {
       ...currentConfig,
       outDir: './dist/' + libName,
-      formats: ['umd'],
+      formats: ['umd', 'es'],
       name: libName,
       fileName: (format) =>
         `${libName}${useHash ? '-[hash]' : ''}.${format}.js`,
