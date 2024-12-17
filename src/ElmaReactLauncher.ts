@@ -27,7 +27,7 @@ interface IContextData {
 
 export class ElmaReactLauncher {
   private props: Props = {
-    eventName: () => `${this.moduleName}-loaded`,
+    eventName: () => `${this.moduleName}-rendered`,
     dependencies: [],
     log: false,
     reactInitObject: {},
@@ -124,6 +124,14 @@ export class ElmaReactLauncher {
     // @ts-ignore
     window[this.moduleName].reactRender(
       Object.assign(this.reactInitObject, { root })
+    )
+
+    document.dispatchEvent(
+      new CustomEvent(
+        this.props.eventName
+          ? this.props.eventName(this.moduleName)
+          : 'React module rendered'
+      )
     )
   }
 
