@@ -10,6 +10,9 @@ const config = {
   ElmaReactLauncher: {
     entry: resolve(__dirname, './src/ElmaReactLauncher.ts'),
   },
+  ElmaDeclineFIO: {
+    entry: resolve(__dirname, './src/ElmaDeclineFIO/index.ts'),
+  },
 }
 
 const currentConfig = config[process.env.LIB_NAME]

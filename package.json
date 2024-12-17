@@ -6,13 +6,17 @@
   "target": "esnext",
   "scripts": {
     "dev": "vite",
-    "build": "npm run clean && tsc && npm run build:umdc && npm run build:reactl",
+    "build": "npm run clean && tsc && npm run build:umdc && npm run build:reactl && npm run build:declineFIO",
     "build:umdc": "tsc && LIB_NAME=ElmaUMDController vite build",
     "build:reactl": "tsc && LIB_NAME=ElmaReactLauncher vite build",
+    "build:declineFIO": "tsc && LIB_NAME=ElmaDeclineFIO vite build",
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {
     "typescript": "~5.6.2",
     "vite": "^6.0.1"
+  },
+  "dependencies": {
+    "petrovich": "^0.2.1"
   }
 }

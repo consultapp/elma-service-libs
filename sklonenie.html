@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <script src="./petrovich.min.js"></script> -->
+  </head>
+  <body>
+    <script type="module">
+      import { getDeclineStringFIO } from './dist/ElmaDeclineFIO.es.js'
+      const mock = [
+        {
+          input: 'Баркова Ольга Владимировна',
+          res: 'Барковой Ольги Владимировны',
+        },
+        {
+          input: 'Невский Александр Михайлович',
+          res: 'Невского Александра Михайловича',
+        },
+        {
+          input: 'Григоренко Евгений Владимирович',
+          res: 'Григоренко Евгения Владимировича',
+        },
+        {
+          input: 'Козырь Евгений Викторович',
+          res: 'Козыря Евгения Викторовича',
+        },
+      ]
+      console.log('mock', mock)
+      mock.forEach((p) =>
+        console.log(
+          getDeclineStringFIO(p.input),
+          getDeclineStringFIO(p.input) === p.res
+        )
+      )
+    </script>
+  </body>
+</html>
