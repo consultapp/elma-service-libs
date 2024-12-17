@@ -8,8 +8,11 @@
   </head>
   <body>
     <script type="module">
-      import { getDeclineStringFIO } from './dist/ElmaDeclineFIO.es.js'
-      const mock = [
+      import {
+        getDeclineStringFIO,
+        detectLang,
+      } from './dist/ElmaDeclineLib.es.js'
+      const mockFio = [
         {
           input: 'Баркова Ольга Владимировна',
           res: 'Барковой Ольги Владимировны',
@@ -27,13 +30,43 @@
           res: 'Козыря Евгения Викторовича',
         },
       ]
-      console.log('mock', mock)
-      mock.forEach((p) =>
+
+      const mockCompanies = [
+        {
+          input: 'GP Exploracion y Produccion S.L.',
+          res: 'GP Exploracion y Produccion, S.L.',
+        },
+        {
+          input: 'Акционерное общество "Аксоль"',
+          res: 'Акционерного общества "Аксоль"',
+        },
+        {
+          input:
+            'Общество с ограниченной ответственностью "Вега Девелопмент Сервис"',
+          res: 'Общества с ограниченной ответственностью "Вега Девелопмент Сервис"',
+        },
+        {
+          input:
+            'Автономная некоммерческая организация "Институт нефтегазовых технологических инициатив"',
+          res: 'Автономной некоммерческой организации "Институт нефтегазовых технологических инициатив"',
+        },
+        {
+          input:
+            'Публичное акционерное общество "Газпром газораспределение Нижний Новгород"',
+          res: 'Публичного акционерного общества "Газпром газораспределение Нижний Новгород"',
+        },
+      ]
+      console.log('mock', mockFio)
+      mockFio.forEach((p) =>
         console.log(
           getDeclineStringFIO(p.input),
           getDeclineStringFIO(p.input) === p.res
         )
       )
+
+      mockCompanies.forEach((item) => {
+        console.log(detectLang(item.input), item.input)
+      })
     </script>
   </body>
 </html>

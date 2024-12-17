@@ -10,8 +10,8 @@ const config = {
   ElmaReactLauncher: {
     entry: resolve(__dirname, './src/ElmaReactLauncher.ts'),
   },
-  ElmaDeclineFIO: {
-    entry: resolve(__dirname, './src/ElmaDeclineFIO/index.ts'),
+  ElmaDeclineLib: {
+    entry: resolve(__dirname, './src/ElmaDeclineLib/index.ts'),
   },
 }
 
