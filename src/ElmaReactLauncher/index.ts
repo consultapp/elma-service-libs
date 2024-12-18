@@ -1,4 +1,4 @@
-import { ElmaUMDController } from './ElmaUMDController'
+import { ElmaUMDController } from '../ElmaUMDController/'
 
 type TEventName = (n: string) => string
 

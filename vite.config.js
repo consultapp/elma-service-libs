@@ -5,10 +5,10 @@ const useHash = false
 
 const config = {
   ElmaUMDController: {
-    entry: resolve(__dirname, './src/ElmaUMDController.ts'),
+    entry: resolve(__dirname, './src/ElmaUMDController/index.ts'),
   },
   ElmaReactLauncher: {
-    entry: resolve(__dirname, './src/ElmaReactLauncher.ts'),
+    entry: resolve(__dirname, './src/ElmaReactLauncher/index.ts'),
   },
   ElmaDeclineLib: {
     entry: resolve(__dirname, './src/ElmaDeclineLib/index.ts'),
