@@ -40,11 +40,14 @@ async function onLoad(): Promise<void> {
   href="<%= UI.widget.filePath %>/<%= Context.data.templateData.css %>"
   onload="<%= Context.data.templateData.cssLoaded() %>"
 />
-<% } %> <% if (Context.data.templateData.isReady) { %>
+<% } %> 
+
+<% if (Context.data.templateData.isReady) { %>
 <script
   type="module"
   src="<%= UI.widget.filePath %>/<%= Context.data.templateData.js %>"
 ></script>
 <% } %>
+
 <div id="<%= Context.data.templateData.rootId %>"></div>
 ```
