@@ -10,11 +10,11 @@ import { ElmaReactLauncher } from 'ElmaReactLauncher.umd.js'
 declare const window: any
 
 const reactLauncher = new ElmaReactLauncher({
-    moduleName: 'surveyLib',
-    fileName: 'surveyLib3333333.js',
+    moduleName: 'ReactLibName',
+    fileName: 'ReactLib.js',
     contextData: Context.data,
-    styleName: 'surveyLib-Dj89JgUH_.css',
-    log: true,
+    styleName: 'ReactLib.css',
+    log: false,
     dependencies: ['React', 'ReactDOM'],
     reactInitObject: {
         data: getMock(),
