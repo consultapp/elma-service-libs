@@ -10,7 +10,7 @@
     <script type="module">
       import {
         getDeclineStringFIO,
-        detectLang,
+        getDeclineStringCompany,
       } from './dist/ElmaDeclineLib.es.js'
       const mockFio = [
         {
@@ -65,7 +65,7 @@
       )
 
       mockCompanies.forEach((item) => {
-        console.log(detectLang(item.input), item.input)
+        console.log(getDeclineStringCompany(item.input), item.input)
       })
     </script>
   </body>

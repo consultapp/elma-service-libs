@@ -1,8 +1,8 @@
 import { petrovich } from './petrovich.js'
 // @ts-ignore
-import * as RussianNouns from '../../node_modules/russian-nouns-js/RussianNouns.js'
+// import * as RussianNouns from '../../node_modules/russian-nouns-js/RussianNouns.js'
 
-console.log('RussianNouns', RussianNouns)
+// ********************************** getDeclineStringFIO *************************************
 
 const orderInit = { last: 'last', first: 'first', middle: 'middle' } as const
 type TOrder = keyof typeof orderInit
@@ -26,6 +26,8 @@ function getDeclineStringFIO(fio: string, order: typeof orderInit = orderInit) {
     .trim()
 }
 
+// ********************************** getDeclineStringCompany *************************************
+
 const regEn = /[a-z]/gi
 const regRu = /[а-я]/gi
 function detectLang(s: string) {
@@ -34,48 +36,33 @@ function detectLang(s: string) {
     : 'ru'
 }
 
-// [
-//     "именительный",
-//     "родительный",
-//     "дательный",
-//     "винительный",
-//     "творительный",
-//     "предложный",
-//     "местный"
-// ]
-
-// Grammatical gender is a noun class system in Russian.
-// {
-//     FEMININE: "женский",
-//     MASCULINE: "мужской",
-//     NEUTER: "средний",
-//     COMMON: "общий"
-// }
+const dicDeclineCompanyTypes = [
+  { t: 'Акционерное общество', r: 'Акционерного общества' },
+  {
+    t: 'Общество с ограниченной ответственностью',
+    r: 'Общества с ограниченной ответственностью',
+  },
+  {
+    t: 'Автономная некоммерческая организация',
+    r: 'Автономной некоммерческой организации',
+  },
+  {
+    t: 'Публичное акционерное общество',
+    r: 'Публичного акционерного общества',
+  },
+  { t: 'Закрытое акционерное общество', r: 'Закрытого акционерного общества' },
+  { t: 'Унитарное предприятие', r: 'Унитарного предприятия' },
+  { t: 'Индивидуальный предприниматель', r: 'Индивидуального предпринимателя' },
+]
 
 function getDeclineStringCompany(company: string) {
   if (detectLang(company) === 'en') return company
 
+  dicDeclineCompanyTypes.forEach(({ t, r }) => {
+    if (company.startsWith(t)) company = company.replace(t, r)
+  })
+
   return company
 }
-
-const rne = new RussianNouns.Engine()
-console.log(rne.decline({ text: 'общество', gender: 'средний' }, 'родительный'))
-console.log(rne.decline({ text: 'с', gender: 'общий' }, 'родительный'))
-console.log(
-  rne.decline({ text: 'ограниченной', gender: 'средний' }, 'родительный')
-)
-console.log(
-  rne.decline({ text: 'ответственностью', gender: 'общий' }, 'родительный')
-)
-
-console.log(
-  rne.decline({ text: 'Автономной', gender: 'женский' }, 'родительный')
-)
-console.log(
-  rne.decline({ text: 'некоммерческой', gender: 'женский' }, 'родительный')
-)
-console.log(
-  rne.decline({ text: 'организации', gender: 'женский' }, 'родительный')
-)
 
 export { getDeclineStringFIO, getDeclineStringCompany }
