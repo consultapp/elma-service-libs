@@ -11,6 +11,8 @@
       import {
         getDeclineStringFIO,
         getDeclineStringCompany,
+        addDeclineCompanyPairs,
+        getDeclineCompanyPairs,
       } from './dist/ElmaDeclineLib.es.js'
       const mockFio = [
         {
@@ -34,7 +36,7 @@
       const mockCompanies = [
         {
           input: 'GP Exploracion y Produccion S.L.',
-          res: 'GP Exploracion y Produccion, S.L.',
+          res: 'GP Exploracion y Produccion S.L.',
         },
         {
           input: 'Акционерное общество "Аксоль"',
@@ -63,9 +65,28 @@
           getDeclineStringFIO(p.input) === p.res
         )
       )
+      console.log(getDeclineCompanyPairs())
+      getDeclineCompanyPairs()
+      addDeclineCompanyPairs([
+        { search: 'Акционерное общество', replace: 'Акционерного общества' },
+        {
+          search: 'Общество с ограниченной ответственностью',
+          replace: 'Общества с ограниченной ответственностью',
+        },
+      ])
+      addDeclineCompanyPairs({
+        search: 'Общество с ограниченной ответственностью',
+        replace: 'Общества с ограниченной ответственностью',
+      })
+
+      console.log(getDeclineCompanyPairs())
 
       mockCompanies.forEach((item) => {
-        console.log(getDeclineStringCompany(item.input), item.input)
+        console.log(
+          getDeclineStringCompany(item.input),
+          item.res,
+          item.res === getDeclineStringCompany(item.input)
+        )
       })
     </script>
   </body>

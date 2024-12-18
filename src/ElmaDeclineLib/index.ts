@@ -1,7 +1,4 @@
 import { petrovich } from './petrovich.js'
-// @ts-ignore
-// import * as RussianNouns from '../../node_modules/russian-nouns-js/RussianNouns.js'
-
 // ********************************** getDeclineStringFIO *************************************
 
 const orderInit = { last: 'last', first: 'first', middle: 'middle' } as const
@@ -36,33 +33,69 @@ function detectLang(s: string) {
     : 'ru'
 }
 
-const dicDeclineCompanyTypes = [
-  { t: 'Акционерное общество', r: 'Акционерного общества' },
+const dicDeclineCompany: DicPair[] = [
+  { search: 'Акционерное общество', replace: 'Акционерного общества' },
   {
-    t: 'Общество с ограниченной ответственностью',
-    r: 'Общества с ограниченной ответственностью',
+    search: 'Общество с ограниченной ответственностью',
+    replace: 'Общества с ограниченной ответственностью',
   },
   {
-    t: 'Автономная некоммерческая организация',
-    r: 'Автономной некоммерческой организации',
+    search: 'Автономная некоммерческая организация',
+    replace: 'Автономной некоммерческой организации',
   },
   {
-    t: 'Публичное акционерное общество',
-    r: 'Публичного акционерного общества',
+    search: 'Публичное акционерное общество',
+    replace: 'Публичного акционерного общества',
   },
-  { t: 'Закрытое акционерное общество', r: 'Закрытого акционерного общества' },
-  { t: 'Унитарное предприятие', r: 'Унитарного предприятия' },
-  { t: 'Индивидуальный предприниматель', r: 'Индивидуального предпринимателя' },
+  {
+    search: 'Закрытое акционерное общество',
+    replace: 'Закрытого акционерного общества',
+  },
+  { search: 'Унитарное предприятие', replace: 'Унитарного предприятия' },
+  {
+    search: 'Индивидуальный предприниматель',
+    replace: 'Индивидуального предпринимателя',
+  },
 ]
+
+type DicPair = {
+  search: string
+  replace: string
+}
+
+function addDeclineCompanySinglePair(pair: DicPair) {
+  if (!('search' in pair) && !('replace' in pair))
+    throw Error('Wrong dictionary pair type.' + pair)
+  if (!dicDeclineCompany.map((item) => item.search).includes(pair.search))
+    dicDeclineCompany.push(pair)
+}
+
+function addDeclineCompanyPairs(p: DicPair | DicPair[]) {
+  if (!p) throw Error('addDeclineCompanyPairs: No pairs.')
+
+  if (Array.isArray(p)) p.forEach((pair) => addDeclineCompanySinglePair(pair))
+  else addDeclineCompanySinglePair(p)
+
+  return dicDeclineCompany
+}
+
+function getDeclineCompanyPairs() {
+  return dicDeclineCompany
+}
 
 function getDeclineStringCompany(company: string) {
   if (detectLang(company) === 'en') return company
 
-  dicDeclineCompanyTypes.forEach(({ t, r }) => {
-    if (company.startsWith(t)) company = company.replace(t, r)
+  dicDeclineCompany.forEach(({ search, replace }) => {
+    if (company.startsWith(search)) company = company.replace(search, replace)
   })
 
   return company
 }
 
-export { getDeclineStringFIO, getDeclineStringCompany }
+export {
+  getDeclineStringFIO,
+  getDeclineStringCompany,
+  addDeclineCompanyPairs,
+  getDeclineCompanyPairs,
+}
