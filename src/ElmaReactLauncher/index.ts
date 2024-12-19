@@ -78,7 +78,12 @@ export class ElmaReactLauncher {
       this.#log(this.props.dependencies, 'start wait.')
 
       Promise.all(
-        this.props.dependencies.map((n) => new ElmaUMDController(n).promise)
+        this.props.dependencies.map(
+          (n) =>
+            new ElmaUMDController(n, {
+              log: this.props.log,
+            }).promise
+        )
       ).then(() => {
         this.#log(this.props.dependencies, 'after wait.')
         this.#setIsReady()
