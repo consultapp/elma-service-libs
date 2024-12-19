@@ -75,7 +75,7 @@ export class ElmaReactLauncher {
 
   #waitForDependencies() {
     if (this.props.dependencies?.length) {
-      this.#log(this.props.dependencies, 'start wait.')
+      this.#log(this.props.dependencies, 'start waiting.')
 
       Promise.all(
         this.props.dependencies.map(
@@ -85,7 +85,7 @@ export class ElmaReactLauncher {
             }).promise
         )
       ).then(() => {
-        this.#log(this.props.dependencies, 'after wait.')
+        this.#log(this.props.dependencies, 'loaded.')
         this.#setIsReady()
       })
     } else {

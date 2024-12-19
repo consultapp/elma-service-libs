@@ -34,15 +34,20 @@ export class ElmaUMDController {
     log: false,
   }
 
+  #resolve() {
+    this.umdPromise.resolve()
+    this.#log(`resolved.`)
+    this.dispatchEvent()
+    this.controller.abort()
+  }
+
+  #reject() {
+    this.umdPromise.reject()
+    this.#log(`rejected.`)
+    this.controller.abort()
+  }
   setTimeout = () => {
-    if (this._moduleName in window) {
-      this.umdPromise.resolve()
-      this.#log(`wait. resolved.`)
-
-      this.dispatchEvent()
-
-      return
-    }
+    if (this._moduleName in window) return this.#resolve()
 
     this.#log(`waiting... Attempt: ${this.attempt}`)
 
@@ -50,8 +55,8 @@ export class ElmaUMDController {
       return window.setTimeout(this.setTimeout, this.props.timeout ?? 50)
 
     if (this.attempt > (this.props.attempts ?? 50)) {
-      this.#log(`rejected. attempts limit.`)
-      this.umdPromise.reject()
+      this.#log(`attempts limit reached.`)
+      if (!this.props.listen) this.#reject() // отклоняем, если не слушаем событие
     }
   }
 
@@ -80,8 +85,7 @@ export class ElmaUMDController {
       document.addEventListener(
         this.props.eventName(this._moduleName),
         () => {
-          this.umdPromise.resolve()
-          this.controller.abort()
+          this.#resolve()
         },
         {
           signal: this.controller.signal,
@@ -104,8 +108,7 @@ export class ElmaUMDController {
   }
 
   loaded() {
-    this.umdPromise.resolve()
-    this.dispatchEvent()
+    this.#resolve()
     this.controller.abort()
   }
 
