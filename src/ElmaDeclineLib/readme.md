@@ -1,5 +1,14 @@
 # Библиотека для склонения ФИО и названий компаний (ElmaDeclineLib)
 
+```ts
+import {
+  getDeclineStringFIO,
+  getDeclineStringCompany,
+  addDeclineCompanyPairs,
+  getDeclineCompanyPairs,
+} from 'ElmaDeclineLib.umd.js'
+```
+
 ## ФИО
 
 ```ts
