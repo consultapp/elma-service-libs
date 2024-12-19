@@ -65,9 +65,11 @@ export class ElmaReactLauncher {
       plugin: false,
     }
     if (props.styleName) Object.assign(this.modulesIsLoaded, { css: false })
+    this.#log('constructor()')
   }
 
   init() {
+    this.#log('init()')
     this.#waitForDependencies()
   }
 
@@ -91,11 +93,10 @@ export class ElmaReactLauncher {
   }
 
   #waitModuleLoad() {
-    new ElmaUMDController(this.moduleName).onLoad(
-      (() => {
-        this.#setModuleLoaded(this.moduleName)
-      }).bind(this)
-    )
+    this.#log('#waitModuleLoad() started')
+    new ElmaUMDController(this.moduleName).onLoad(() => {
+      this.#setModuleLoaded(this.moduleName)
+    })
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -113,12 +114,13 @@ export class ElmaReactLauncher {
   #setModuleLoaded = (name: string) => {
     // @ts-ignore
     this.modulesIsLoaded[name] = true
-    this.#log('name:', this.modulesIsLoaded)
+    this.#log(name, this.modulesIsLoaded)
 
     if (this.#checkModulesIsLoaded()) this.#render()
   }
 
   #render() {
+    this.#log('react render()')
     const root = document.getElementById(
       this.contextData.templateData?.rootId ?? 'rootId'
     )
