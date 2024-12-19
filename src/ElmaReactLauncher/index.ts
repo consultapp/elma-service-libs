@@ -91,10 +91,11 @@ export class ElmaReactLauncher {
   }
 
   #waitModuleLoad() {
-    new ElmaUMDController(this.moduleName).onLoad(() => {
-      this.#log('waitLibLoad:' + 'setModuleLoaded')
-      this.#setModuleLoaded(this.moduleName)
-    })
+    new ElmaUMDController(this.moduleName).onLoad(
+      (() => {
+        this.#setModuleLoaded(this.moduleName)
+      }).bind(this)
+    )
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,7 +113,7 @@ export class ElmaReactLauncher {
   #setModuleLoaded = (name: string) => {
     // @ts-ignore
     this.modulesIsLoaded[name] = true
-    this.#log(this.modulesIsLoaded)
+    this.#log('name:', this.modulesIsLoaded)
 
     if (this.#checkModulesIsLoaded()) this.#render()
   }

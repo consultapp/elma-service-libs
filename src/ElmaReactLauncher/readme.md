@@ -23,6 +23,7 @@ const reactLauncher = new ElmaReactLauncher({
 })
 
 async function onInit(): Promise<void> {
+    window?.document.querySelector('html')?.setAttribute('data-mantine-color-scheme', 'light')
     reactLauncher.init()
 }
 
@@ -40,9 +41,7 @@ async function onLoad(): Promise<void> {
   href="<%= UI.widget.filePath %>/<%= Context.data.templateData.css %>"
   onload="<%= Context.data.templateData.cssLoaded() %>"
 />
-<% } %> 
-
-<% if (Context.data.templateData.isReady) { %>
+<% } %> <% if (Context.data.templateData.isReady) { %>
 <script
   type="module"
   src="<%= UI.widget.filePath %>/<%= Context.data.templateData.js %>"
