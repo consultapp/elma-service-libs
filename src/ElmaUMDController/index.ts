@@ -47,7 +47,7 @@ export class ElmaUMDController {
     this.#log(`waiting... Attempt: ${this.attempt}`)
 
     if (this.attempt++ < (this.props.attempts ?? 50))
-      return window.setTimeout(this.setTimeout, this.props.timeout ?? 20)
+      return window.setTimeout(this.setTimeout, this.props.timeout ?? 50)
 
     if (this.attempt > (this.props.attempts ?? 50)) {
       this.#log(`rejected. attempts limit.`)
@@ -113,7 +113,7 @@ export class ElmaUMDController {
     if (this.props.listen) return
 
     if (this.props.eventName) {
-      this.#log(`${this.props.eventName} dispatched.`)
+      this.#log(`${this.props.eventName()} dispatched.`)
       window.document.dispatchEvent(
         new window.CustomEvent(this.props.eventName())
       )
