@@ -107,6 +107,7 @@ export class ElmaReactLauncher {
     this.#log('#waitModuleLoad() started')
     new ElmaUMDController(this.moduleName, {
       log: this.props.log,
+      listen: false,
     }).onLoad(() => {
       this.#setModuleLoaded(this.moduleName)
     })
