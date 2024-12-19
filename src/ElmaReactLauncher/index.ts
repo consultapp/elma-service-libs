@@ -27,7 +27,7 @@ interface IContextData {
 
 export class ElmaReactLauncher {
   private props: Props = {
-    eventName: () => `${this.moduleName}-rendered`,
+    eventName: () => `${this.moduleName}-loaded`,
     dependencies: [],
     log: false,
     reactInitObject: {},
@@ -74,14 +74,16 @@ export class ElmaReactLauncher {
   }
 
   #waitForDependencies() {
-    if (this.props.dependencies?.length)
+    if (this.props.dependencies?.length) {
+      this.#log(this.props.dependencies, 'start wait.')
+
       Promise.all(
         this.props.dependencies.map((n) => new ElmaUMDController(n).promise)
       ).then(() => {
         this.#log(this.props.dependencies, 'after wait.')
         this.#setIsReady()
       })
-    else {
+    } else {
       this.#log(this.props.dependencies, 'no wait.')
       this.#setIsReady()
     }
@@ -100,7 +102,6 @@ export class ElmaReactLauncher {
     this.#log('#waitModuleLoad() started')
     new ElmaUMDController(this.moduleName, {
       log: this.props.log,
-      eventName: () => `reactload`,
     }).onLoad(() => {
       this.#setModuleLoaded(this.moduleName)
     })

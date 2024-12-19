@@ -10,14 +10,14 @@ if (typeof Promise.withResolvers === 'undefined') {
   }
 }
 
-type TEventName = (n: string) => string
+type TEventName = (n?: string) => string
 type Props = {
   listen?: boolean
   wait?: boolean
   timeout?: number
   attempts?: number
   log?: boolean
-  eventName: TEventName
+  eventName?: TEventName
 }
 
 export class ElmaUMDController {
@@ -35,14 +35,21 @@ export class ElmaUMDController {
   }
 
   setTimeout = () => {
-    if (this._moduleName in window) return this.umdPromise.resolve()
+    if (this._moduleName in window) {
+      this.umdPromise.resolve()
+      this.#log(`wait. resolved.`)
+
+      this.dispatchEvent()
+
+      return
+    }
 
     this.#log(`waiting... Attempt: ${this.attempt}`)
 
-    if (this.attempt++ < 20)
+    if (this.attempt++ < (this.props.attempts ?? 50))
       return window.setTimeout(this.setTimeout, this.props.timeout ?? 20)
 
-    if (this.attempt > 20) {
+    if (this.attempt > (this.props.attempts ?? 50)) {
       this.#log(`rejected. attempts limit.`)
       this.umdPromise.reject()
     }
@@ -56,6 +63,7 @@ export class ElmaUMDController {
   #init() {
     this.#wait()
     this.#addListener()
+    this.#log(`init()`, this.props)
 
     return this.umdPromise.promise
   }
@@ -68,16 +76,17 @@ export class ElmaUMDController {
   #addListener() {
     if (!this.props.listen) return
 
-    document.addEventListener(
-      this.props.eventName(this._moduleName),
-      () => {
-        this.umdPromise.resolve()
-        this.controller.abort()
-      },
-      {
-        signal: this.controller.signal,
-      }
-    )
+    if (this.props.eventName)
+      document.addEventListener(
+        this.props.eventName(this._moduleName),
+        () => {
+          this.umdPromise.resolve()
+          this.controller.abort()
+        },
+        {
+          signal: this.controller.signal,
+        }
+      )
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -96,11 +105,28 @@ export class ElmaUMDController {
 
   loaded() {
     this.umdPromise.resolve()
+    this.dispatchEvent()
+    this.controller.abort()
+  }
+
+  dispatchEvent() {
+    if (this.props.listen) return
+
+    if (this.props.eventName) {
+      this.#log(`${this.props.eventName} dispatched.`)
+      window.document.dispatchEvent(
+        new window.CustomEvent(this.props.eventName())
+      )
+    } else {
+      this.#log(`Error: no event name. ${this.props.eventName}`)
+    }
   }
 
   onLoad(cb: () => void) {
     this.umdPromise.promise.then(() => {
+      this.dispatchEvent()
       cb()
+      this.controller.abort()
     })
   }
 }
