@@ -1,5 +1,43 @@
 # ElmaReactLauncher
 
+Класс содержит последовательность подключения UMD библиотеки c реакт приложением.
+
+## 4 этапа подключения:
+
+- Ожидание переданных зависимостей. Осуществляется с помощью `ElmaUMDController`;
+- Через флаг `isReady` в `contextData.templateData` подтверждаем разрешение на загрузку модуля в шаблоне Elma, создаем `ElmaUMDController` для нашего модуля;
+- Ожидаем необходимые для маунта реакта события: загрузку CSS, событие onLoad плагина, событие загрузки UMD библиотеки;
+- Рендерим реакт в `div` c `roodId`, находящимся в `contextData.templateData` c использованием объекта инициализации реакта, переданного при создании лаунчера - `reactInitObject`.
+
+## Типы данных
+
+```ts
+type TEventName = (n: string) => string
+
+type Props = {
+  moduleName?: string
+  fileName?: string
+  contextData?: IContextData
+  eventName?: TEventName
+  styleName?: string
+  dependencies?: string[]
+  log?: boolean
+  reactInitObject?: Object
+}
+
+type TReactModuleTemplateData = {
+  isReady: boolean
+  js: string
+  rootId: string
+  css?: string
+  cssLoaded?: () => void
+}
+
+interface IContextData {
+  templateData?: TReactModuleTemplateData
+}
+```
+
 ## Сценарий / Клиент
 
 ```js
