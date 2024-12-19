@@ -10,7 +10,7 @@ type Props = {
   timeout?: number // 50
   attempts?: number // 50
   log?: boolean // false
-  eventName?: TEventName
+  eventName?: TEventName // () => `${this._moduleName}-loaded`
 }
 
 class ElmaUMDController{
