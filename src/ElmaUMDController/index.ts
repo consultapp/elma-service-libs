@@ -25,6 +25,7 @@ export class ElmaUMDController {
     Promise.withResolvers()
   private controller: AbortController = new AbortController()
   private attempt: number = 0
+  private timeoutId: number | undefined
   props: Props = {
     eventName: () => `${this._moduleName}-loaded`,
     listen: true,
@@ -35,6 +36,7 @@ export class ElmaUMDController {
   }
 
   #resolve() {
+    if (this.timeoutId) clearTimeout(this.timeoutId)
     this.umdPromise.resolve()
     this.#log(`resolved.`)
     this.dispatchEvent()
@@ -42,19 +44,24 @@ export class ElmaUMDController {
   }
 
   #reject() {
+    if (this.timeoutId) clearTimeout(this.timeoutId)
     this.umdPromise.reject()
     this.#log(`rejected.`)
     this.controller.abort()
   }
   setTimeout = () => {
-    if (this._moduleName in window) return this.#resolve()
-
+    if (this._moduleName in window) {
+      this.#resolve()
+      return
+    }
     this.#log(`waiting... Attempt: ${this.attempt}`)
 
-    if (this.attempt++ < (this.props.attempts ?? 50))
-      return window.setTimeout(this.setTimeout, this.props.timeout ?? 50)
-
-    if (this.attempt > (this.props.attempts ?? 50)) {
+    if (this.attempt++ < (this.props.attempts ?? 50)) {
+      this.timeoutId = window.setTimeout(
+        this.setTimeout,
+        this.props.timeout ?? 50
+      )
+    } else {
       this.#log(`attempts limit reached.`)
       if (!this.props.listen) this.#reject() // отклоняем, если не слушаем событие
     }
@@ -100,7 +107,7 @@ export class ElmaUMDController {
   }
 
   get moduleName(): string {
-    return this.moduleName
+    return this._moduleName
   }
 
   get promise() {
@@ -115,11 +122,10 @@ export class ElmaUMDController {
   dispatchEvent() {
     if (this.props.listen) return
 
-    if (this.props.eventName) {
-      this.#log(`${this.props.eventName()} dispatched.`)
-      window.document.dispatchEvent(
-        new window.CustomEvent(this.props.eventName())
-      )
+    const eventName = this.props.eventName?.(this._moduleName) ?? ''
+    if (eventName) {
+      this.#log(`${eventName} dispatched.`)
+      window.document.dispatchEvent(new window.CustomEvent(eventName))
     } else {
       this.#log(`Error: no event name. ${this.props.eventName}`)
     }
