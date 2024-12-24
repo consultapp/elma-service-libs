@@ -8,7 +8,7 @@ type Props = {
   listen?: boolean // true
   wait?: boolean // true
   timeout?: number // 50
-  attempts?: number // 50
+  attempts?: number // 500
   log?: boolean // false
   eventName?: TEventName // () => `${this._moduleName}-loaded`
 }

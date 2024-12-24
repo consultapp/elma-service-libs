@@ -17,11 +17,13 @@ type TEventName = (n: string) => string
 type Props = {
   moduleName?: string
   fileName?: string
+  styleName?: string
   contextData?: IContextData
   eventName?: TEventName
-  styleName?: string
   dependencies?: string[]
   log?: boolean
+  timeout?: number
+  attempts?: number
   reactInitObject?: Object
 }
 
