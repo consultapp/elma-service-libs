@@ -31,7 +31,7 @@ export class ElmaUMDController {
     listen: true,
     wait: true,
     timeout: 50,
-    attempts: 50,
+    attempts: 500,
     log: false,
   }
 

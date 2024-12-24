@@ -68,6 +68,7 @@ export class ElmaReactLauncher {
     }
     if (props.styleName) Object.assign(this.modulesIsLoaded, { css: false })
     this.#log('constructor()')
+    this.#log('this.props:', this.props)
   }
 
   init() {
