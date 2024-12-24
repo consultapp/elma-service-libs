@@ -5,11 +5,13 @@ type TEventName = (n: string) => string
 type Props = {
   moduleName?: string
   fileName?: string
+  styleName?: string
   contextData?: IContextData
   eventName?: TEventName
-  styleName?: string
   dependencies?: string[]
   log?: boolean
+  timeout?: number
+  attempts?: number
   reactInitObject?: Object
 }
 
@@ -69,7 +71,7 @@ export class ElmaReactLauncher {
   }
 
   init() {
-    this.#log('init()')
+    this.#log('init()', this.contextData.templateData)
     this.#waitForDependencies()
   }
 
@@ -82,6 +84,8 @@ export class ElmaReactLauncher {
           (n) =>
             new ElmaUMDController(n, {
               log: this.props.log,
+              timeout: this.props.timeout!,
+              attempts: this.props.attempts!,
             }).promise
         )
       ).then(() => {
